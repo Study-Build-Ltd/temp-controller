@@ -8,13 +8,13 @@ read -p "Enter the desired temperature (deg. C): " set_temperature
 echo "~~~ Starting the controller ~~~"
 echo "Press Ctr+C to terminate"
 
-echo relay_pin > /sys/class/gpio/export
-echo "out" > /sys/class/gpio/gpio17/value
+echo "$relay_pin" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/"gpio$relay_pin"/value
 
 while true
 do
-
     data=$(cat /sys/bus/w1/devices/28-*/temperature)
     echo "$(echo "scale=1;$data/1000"|bc)"" $(awk 'BEGIN { print "\xc2\xb0C"; }')"
+    echo "relay status: " cat /sys/class/gpio/"gpio$relay_pin"/value
     sleep 1s
 done
