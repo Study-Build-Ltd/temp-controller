@@ -11,6 +11,17 @@ echo "Press Ctr+C to terminate"
 echo "$relay_pin" > /sys/class/gpio/export
 echo "out" > /sys/class/gpio/"gpio$relay_pin"/value
 
+# enabling one-wire interface
+if grep -q dtoverlay=w1-gpio /boot/config.txt; 
+then
+    echo "dtoverlay=w1-gpio"
+else
+    text="
+    dtoverlay=w1-gpio"
+    sudo sh -c "echo '${text}'>>/boot/config.txt"
+    echo "Appended dtoverlay=w1-gpio to /boot/config.txt"
+fi
+
 while true
 do
     data=$(cat /sys/bus/w1/devices/28-*/temperature)
