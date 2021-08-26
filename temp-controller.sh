@@ -20,6 +20,8 @@ else
     dtoverlay=w1-gpio"
     sudo sh -c "echo '${text}'>>/boot/config.txt"
     echo "Appended dtoverlay=w1-gpio to /boot/config.txt"
+    echo "Please Reboot your Pi. Exiting..."
+    exit 1
 fi
 
 while true
