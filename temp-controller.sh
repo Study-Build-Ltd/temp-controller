@@ -27,6 +27,16 @@ fi
 while true
 do
     data=$(cat /sys/bus/w1/devices/28-*/temperature)
+
+    if [[ data -lt (set_temperature*1000)]]
+    then
+        echo "1" > /sys/class/gpio/"gpio$relay_pin"/value
+        if [[ data -gt (set_temperature*1000 + 500)]]
+        then
+            echo "0" > /sys/class/gpio/"gpio$relay_pin"/value
+        fi
+    fi
+
     echo "$(echo "scale=1;$data/1000"|bc)"" $(awk 'BEGIN { print "\xc2\xb0C"; }')"
     echo "relay status: " cat /sys/class/gpio/"gpio$relay_pin"/value
     sleep 1s
